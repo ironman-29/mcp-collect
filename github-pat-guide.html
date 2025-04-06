@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude MCP GitHub 연동 설정 가이드</title>
+    <style>
+        :root {
+            --primary-color: #6200ee;
+            --secondary-color: #03dac6;
+            --dark-color: #121212;
+            --light-color: #ffffff;
+            --warning-color: #ff9800;
+            --code-bg: #f5f5f5;
+            --border-color: #e0e0e0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fafafa;
+            padding-bottom: 40px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+        }
+        
+        header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        main {
+            padding: 30px 0;
+        }
+        
+        .page-title {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+        
+        .intro {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .steps-container {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+        
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .step-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .step-content {
+            padding-left: 40px;
+        }
+        
+        ul, ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        .warning {
+            background-color: #fff3e0;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .warning strong {
+            color: #e65100;
+        }
+        
+        code, pre {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg);
+            border-radius: 4px;
+        }
+        
+        code {
+            padding: 2px 5px;
+        }
+        
+        pre {
+            padding: 15px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .examples {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .example-item {
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .tips {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tip-item {
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-size: 1.7em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        .highlight {
+            background-color: #ffecb3;
+            padding: 0 3px;
+        }
+        
+        .path {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .page-title {
+                font-size: 1.8em;
+            }
+            
+            .step-title {
+                font-size: 1.3em;
+            }
+            
+            .section-title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Claude MCP</div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h1 class="page-title">GitHub 개인 액세스 토큰(PAT) 설정 가이드</h1>
+        
+        <section class="intro">
+            <p>Claude MCP 설정에서 GitHub 연동을 위해 <code>GITHUB_PERSONAL_ACCESS_TOKEN</code>을 설정하는 방법을 안내합니다. 이 가이드를 통해 GitHub Personal Access Token(PAT)을 생성하고 설정 파일에 적용하는 방법을 알아보세요.</p>
+        </section>
+        
+        <section class="steps-container">
+            <div class="step">
+                <h2 class="step-title"><span class="step-number">1</span> GitHub 로그인</h2>
+                <div class="step-content">
+                    <p>먼저 GitHub 계정에 로그인합니다.</p>
+                    <p><a href="https://github.com" target="_blank">https://github.com</a></p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <h2 class="step-title"><span class="step-number">2</span> 개인 토큰 생성 페이지로 이동</h2>
+                <div class="step-content">
+                    <p>다음 경로를 통해 토큰 생성 페이지로 이동합니다:</p>
+                    <ol>
+                        <li>우측 상단 프로필 > <span class="path">Settings</span></li>
+                        <li>왼쪽 메뉴에서 <span class="path">Developer settings</span> 선택</li>
+                        <li><span class="path">Personal access tokens</span></li>
+                        <li><span class="path">Tokens (classic)</span></li>
+                        <li><span class="path">Generate new token (classic)</span> 클릭</li>
+                    </ol>
+                    <p>또는 다음 링크로 직접 접속할 수 있습니다:</p>
+                    <p><a href="https://github.com/settings/tokens" target="_blank">https://github.com/settings/tokens</a></p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <h2 class="step-title"><span class="step-number">3</span> 토큰 생성</h2>
+                <div class="step-content">
+                    <ul>
+                        <li><strong>Note</strong>: 예) <code>Claude MCP Token</code></li>
+                        <li><strong>Expiration</strong>: 권한 유지 기간 설정 (예: 90일, 혹은 <code>No expiration</code>)</li>
+                        <li><strong>Scopes(권한)</strong>: Claude가 GitHub 리포지토리에 접근하려면 최소 다음 권한이 필요합니다:
+                            <ul>
+                                <li><code>repo</code> (필수)</li>
+                                <li><code>read:user</code> (옵션)</li>
+                                <li><code>workflow</code> (GitHub Actions 사용 시)</li>
+                            </ul>
+                        </li>
+                        <li>설정 완료 후 <span class="path">Generate token</span> 클릭</li>
+                    </ul>
+                    <div class="warning">
+                        <strong>🔐 주의:</strong> 생성 직후 한 번만 볼 수 있으므로 반드시 복사해두세요!
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <h2 class="step-title"><span class="step-number">4</span> MCP 설정 파일에 토큰 적용</h2>
+                <div class="step-content">
+                    <p>아래처럼 <code>claude_desktop_config.json</code> 또는 해당 MCP 설정 JSON에 붙여넣기 합니다:</p>
+                    <pre><code>{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      }
+    }
+  }
+}</code></pre>
+                    <ul>
+                        <li><code>ghp_</code>로 시작하는 GitHub 토큰을 <code>ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code> 자리에 넣습니다.</li>
+                        <li>JSON에서 큰따옴표(<code>"</code>)와 쉼표 위치를 유의하세요.</li>
+                        <li>설정 후 Claude Desktop을 재시작해야 합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="examples">
+            <h2 class="section-title">Claude에서 GitHub 활용 예시</h2>
+            <div class="example-item">
+                "내 GitHub 리포지토리 리스트를 보여줘."
+            </div>
+            <div class="example-item">
+                "사용자 이름 'octocat'의 공개 저장소를 검색해줘."
+            </div>
+            <div class="example-item">
+                "이 리포지토리의 `README.md`를 요약해줘."
+            </div>
+        </section>
+        
+        <section class="tips">
+            <h2 class="section-title">추가 팁</h2>
+            <div class="tip-item">
+                <p>만약 보안을 위해 토큰을 별도 <code>.env</code> 파일에 관리하고 싶다면, Node.js 기반 서버로 확장해서 <code>.env</code> 환경에서 불러오는 방식도 가능합니다.</p>
+            </div>
+            <div class="tip-item">
+                <div class="warning">
+                    <strong>보안 주의:</strong> 토큰 누출 방지를 위해 GitHub 토큰은 <strong>절대 공개 저장소에 올리지 마세요</strong>.
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 Claude MCP GitHub 연동 설정 가이드</p>
+        </div>
+    </footer>
+</body>
+</html>
