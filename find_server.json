@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\username\\Documents",
+        "C:\\Users\\username\\Downloads"
+      ]
+    },
+    "find-files": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-find-files",
+        "--root",
+        "C:\\Users\\username\\Documents"
+      ]
+    }
+  }
+}
